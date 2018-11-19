@@ -7,13 +7,13 @@
 """
 
 
-from keras.models import Model
-from keras.layers import Input, Conv2D, GlobalAveragePooling2D, Dropout
-from keras.layers import Activation, BatchNormalization, add, Reshape
-from keras.applications.mobilenet import relu6, DepthwiseConv2D
-from keras.utils.vis_utils import plot_model
+from tf.keras.models import Model
+from tf.keras.layers import Input, Conv2D, GlobalAveragePooling2D, Dropout
+from tf.keras.layers import Activation, BatchNormalization, add, Reshape
+from tf.keras.applications.mobilenet import relu6, DepthwiseConv2D
+from tf.keras.utils.vis_utils import plot_model
 
-from keras import backend as K
+from tf.keras import backend as K
 
 
 def _conv_block(inputs, filters, kernel, strides):

@@ -6,13 +6,15 @@ import sys
 import argparse
 import pandas as pd
 
+import tensorflow as tf
+
 from mobilenet_v2 import MobileNetv2
 
-from keras.optimizers import Adam
-from keras.preprocessing.image import ImageDataGenerator
-from keras.callbacks import EarlyStopping
-from keras.layers import Conv2D, Reshape, Activation
-from keras.models import Model
+from tf.keras.optimizers import Adam
+from tf.keras.preprocessing.image import ImageDataGenerator
+from tf.keras.callbacks import EarlyStopping
+from tf.keras.layers import Conv2D, Reshape, Activation
+from tf.keras.models import Model
 
 
 def main(argv):

@@ -114,12 +114,12 @@ def fine_tune(num_classes, weights, model):
     """
     model.load_weights(weights)
 
-    x = model.get_layer('Dropout').output
-    x = Conv2D(num_classes, (1, 1), padding='same')(x)
-    x = Activation('softmax', name='softmax')(x)
-    output = Reshape((num_classes,))(x)
+    x = tf.keras.model.get_layer('Dropout').output
+    x = tf.keras.Conv2D(num_classes, (1, 1), padding='same')(x)
+    x = tf.keras.Activation('softmax', name='softmax')(x)
+    output =tf.keras.Reshape((num_classes,))(x)
 
-    model = Model(inputs=model.input, outputs=output)
+    model = tf.keras.Model(inputs=model.input, outputs=output)
 
     return model
 
@@ -139,13 +139,13 @@ def train(batch, epochs, num_classes, size, weights, tclasses):
     train_generator, validation_generator, count1, count2 = generate(batch, size)
 
     if weights:
-        model = MobileNetv2((size, size, 3), tclasses)
-        model = fine_tune(num_classes, weights, model)
+        model = tf.keras.MobileNetv2((size, size, 3), tclasses)
+        model = tf.keras.fine_tune(num_classes, weights, model)
     else:
-        model = MobileNetv2((size, size, 3), num_classes)
+        model =tf.keras.MobileNetv2((size, size, 3), num_classes)
 
-    opt = Adam()
-    earlystop = EarlyStopping(monitor='val_acc', patience=30, verbose=0, mode='auto')
+    opt = tf.keras.Adam()
+    earlystop = tf.keras.EarlyStopping(monitor='val_acc', patience=30, verbose=0, mode='auto')
     model.compile(loss='categorical_crossentropy', optimizer=opt, metrics=['accuracy'])
 
     hist = model.fit_generator(

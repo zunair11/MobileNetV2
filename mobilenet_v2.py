@@ -7,11 +7,11 @@
 """
 
 
-from tf.keras.models import Model
-from tf.keras.layers import Input, Conv2D, GlobalAveragePooling2D, Dropout
-from tf.keras.layers import Activation, BatchNormalization, add, Reshape
-from tf.keras.applications.mobilenet import relu6, DepthwiseConv2D
-from tf.keras.utils.vis_utils import plot_model
+#from tf.keras.models import Model
+#from tf.keras.layers import Input, Conv2D, GlobalAveragePooling2D, Dropout
+#from tf.keras.layers import Activation, BatchNormalization, add, Reshape
+#from tf.keras.applications.mobilenet import relu6, DepthwiseConv2D
+#from tf.keras.utils.vis_utils import plot_model
 
 from tf.keras import backend as K
 
@@ -36,9 +36,9 @@ def _conv_block(inputs, filters, kernel, strides):
 
     channel_axis = 1 if K.image_data_format() == 'channels_first' else -1
 
-    x = Conv2D(filters, kernel, padding='same', strides=strides)(inputs)
-    x = BatchNormalization(axis=channel_axis)(x)
-    return Activation(relu6)(x)
+    x = tf.keras.Conv2D(filters, kernel, padding='same', strides=strides)(inputs)
+    x = tf.keras.BatchNormalization(axis=channel_axis)(x)
+    return tf.keras.Activation(relu6)(x)
 
 
 def _bottleneck(inputs, filters, kernel, t, s, r=False):
@@ -66,12 +66,12 @@ def _bottleneck(inputs, filters, kernel, t, s, r=False):
 
     x = _conv_block(inputs, tchannel, (1, 1), (1, 1))
 
-    x = DepthwiseConv2D(kernel, strides=(s, s), depth_multiplier=1, padding='same')(x)
-    x = BatchNormalization(axis=channel_axis)(x)
-    x = Activation(relu6)(x)
+    x = tf.keras.DepthwiseConv2D(kernel, strides=(s, s), depth_multiplier=1, padding='same')(x)
+    x = tf.keras.BatchNormalization(axis=channel_axis)(x)
+    x = tf.keras.Activation(relu6)(x)
 
-    x = Conv2D(filters, (1, 1), strides=(1, 1), padding='same')(x)
-    x = BatchNormalization(axis=channel_axis)(x)
+    x = tf.keras.Conv2D(filters, (1, 1), strides=(1, 1), padding='same')(x)
+    x = tf.keras.BatchNormalization(axis=channel_axis)(x)
 
     if r:
         x = add([x, inputs])
@@ -129,15 +129,15 @@ def MobileNetv2(input_shape, k):
     x = _inverted_residual_block(x, 320, (3, 3), t=6, strides=1, n=1)
 
     x = _conv_block(x, 1280, (1, 1), strides=(1, 1))
-    x = GlobalAveragePooling2D()(x)
-    x = Reshape((1, 1, 1280))(x)
-    x = Dropout(0.3, name='Dropout')(x)
-    x = Conv2D(k, (1, 1), padding='same')(x)
+    x = tf.keras.GlobalAveragePooling2D()(x)
+    x = tf.keras.Reshape((1, 1, 1280))(x)
+    x = tf.keras.Dropout(0.3, name='Dropout')(x)
+    x = tf.keras.Conv2D(k, (1, 1), padding='same')(x)
 
-    x = Activation('softmax', name='softmax')(x)
-    output = Reshape((k,))(x)
+    x = tf.keras.tf.keras.Activation('softmax', name='softmax')(x)
+    output = tf.keras.Reshape((k,))(x)
 
-    model = Model(inputs, output)
+    model = tf.keras.Model(inputs, output)
     plot_model(model, to_file='images/MobileNetv2.png', show_shapes=True)
 
     return model
